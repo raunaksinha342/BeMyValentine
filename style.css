@@ -10,19 +10,25 @@ body {
 
 .container {
   text-align: center;
+  transform: scale(1.15); /* makes everything larger */
+}
+
+h1 {
+  font-size: 3rem;        /* BIG question text */
+  margin-bottom: 40px;
 }
 
 .buttons {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 button {
-  padding: 12px 24px;
-  font-size: 18px;
+  padding: 22px 40px;    /* BIG buttons */
+  font-size: 26px;
   border: none;
-  border-radius: 12px;
+  border-radius: 20px;
   cursor: pointer;
-  margin: 0 10px;
+  margin: 0 20px;
   transition: transform 0.2s;
 }
 
