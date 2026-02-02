@@ -1,35 +1,44 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Comic Sans MS', cursive;
   background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
+
+  /* PERFECT CENTERING */
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0;
 }
 
 .container {
   text-align: center;
-  transform: scale(1.15); /* makes everything larger */
 }
 
+/* Big cute heading */
 h1 {
-  font-size: 3rem;        /* BIG question text */
+  font-size: 3rem;
   margin-bottom: 40px;
 }
 
+/* Buttons area */
 .buttons {
-  margin-top: 30px;
+  display: flex;
+  gap: 30px;
+  justify-content: center;
 }
 
+/* Buttons */
 button {
-  padding: 22px 40px;    /* BIG buttons */
+  padding: 22px 40px;
   font-size: 26px;
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  margin: 0 20px;
-  transition: transform 0.2s;
+  transition: transform 0.25s ease;
 }
 
 #yesBtn {
@@ -39,4 +48,37 @@ button {
 
 #noBtn {
   background-color: #adb5bd;
+}
+
+/* 💖 Bounce animation */
+@keyframes bounce {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.15); }
+  50%  { transform: scale(0.95); }
+  70%  { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.bounce {
+  animation: bounce 0.4s ease;
+}
+
+/* 💕 Floating hearts */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  font-size: 24px;
+  animation: floatUp 3s linear forwards;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) scale(1.5);
+    opacity: 0;
+  }
 }
