@@ -8,7 +8,7 @@ let clicks = 0;
 /* Emoji reaction states */
 const emojiStates = ["🥺", "😟", "😣", "😖", "😵‍💫", "🙄"];
 
-/* Vibration helper (Android only) */
+/* Vibration helper */
 function vibrate(pattern) {
   if ("vibrate" in navigator) {
     navigator.vibrate(pattern);
@@ -48,7 +48,7 @@ document.head.appendChild(style);
 noBtn.addEventListener("click", () => {
   clicks++;
 
-  /* Phone shake vibration */
+  /* Vibration shake */
   if (clicks < 5) {
     vibrate([30, 20, 30]);
   } else {
@@ -60,7 +60,7 @@ noBtn.addEventListener("click", () => {
   emoji.style.transform = "rotate(15deg)";
   setTimeout(() => emoji.style.transform = "rotate(-15deg)", 120);
 
-  /* YES grows slowly (many clicks needed) */
+  /* YES grows slowly */
   yesScale += 0.08;
   yesBtn.style.transform = `translateX(-50%) scale(${yesScale})`;
 
@@ -69,12 +69,20 @@ noBtn.addEventListener("click", () => {
     yesBtn.style.width = "50vw";
   }
 
-  /* NO button runs away */
-  const maxX = window.innerWidth - noBtn.offsetWidth;
-  const maxY = window.innerHeight - noBtn.offsetHeight;
+  /* NO button disappears after enough clicks */
+  if (clicks >= 12) { // adjust number of clicks before disappearing
+    noBtn.style.opacity = "0";
+    noBtn.style.pointerEvents = "none";
+    return;
+  }
 
-  noBtn.style.left = Math.random() * maxX + "px";
-  noBtn.style.top = Math.random() * maxY + "px";
+  /* NO button runs away but stays fully on screen */
+  const padding = 10; // margin from edges
+  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+  noBtn.style.left = padding + Math.random() * maxX + "px";
+  noBtn.style.top = padding + Math.random() * maxY + "px";
 
   /* Hearts */
   createHeart();
