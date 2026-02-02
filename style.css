@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow: hidden; /* prevent scrolling */
+}
+
 body {
   font-family: 'Comic Sans MS', cursive;
   background: linear-gradient(135deg, #ff9a9e, #fad0c4);
@@ -47,7 +51,7 @@ button {
   border-radius: 26px;
   cursor: pointer;
   position: absolute;
-  transition: transform 0.25s ease, left 0.3s ease, top 0.3s ease, width 0.3s ease;
+  transition: transform 0.25s ease, left 0.3s ease, top 0.3s ease, width 0.3s ease, opacity 0.3s ease;
 }
 
 /* YES */
