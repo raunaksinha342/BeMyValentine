@@ -1,105 +1,35 @@
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-const emoji = document.getElementById("emoji");
 
 let yesScale = 1;
-let clicks = 0;
+let noScale = 1;
 
-/* Emoji reaction states */
-const emojiStates = ["🥺", "😟", "😣", "😖", "😵‍💫", "🙄"];
+// Limits to avoid disappearing or runaway scaling
+const NO_MIN_SCALE = 0.25;
+const YES_MAX_SCALE = 2.5;
 
-/* Vibration helper */
-function vibrate(pattern) {
-  if ("vibrate" in navigator) {
-    navigator.vibrate(pattern);
-  }
-}
-
-/* Floating hearts */
-function createHeart() {
-  const heart = document.createElement("div");
-  heart.textContent = "💖";
-  heart.style.position = "fixed";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.bottom = "-20px";
-  heart.style.fontSize = Math.random() * 20 + 20 + "px";
-  heart.style.animation = "floatUp 3s linear forwards";
-  heart.style.pointerEvents = "none";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 3000);
-}
-
-/* Inject heart animation */
-const style = document.createElement("style");
-style.innerHTML = `
-@keyframes floatUp {
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-110vh);
-    opacity: 0;
-  }
-}`;
-document.head.appendChild(style);
-
-/* NO button logic */
 noBtn.addEventListener("click", () => {
-  clicks++;
+  // adjust scales with clamping
+  yesScale = Math.min(YES_MAX_SCALE, +(yesScale + 0.2).toFixed(3));
+  noScale = Math.max(NO_MIN_SCALE, +(noScale - 0.15).toFixed(3));
 
-  /* Vibration shake */
-  if (clicks < 5) {
-    vibrate([30, 20, 30]);
+  // apply scale transforms only (keeps position stable)
+  yesBtn.style.transform = `scale(${yesScale})`;
+  noBtn.style.transform = `scale(${noScale})`;
+
+  // graceful hide when very small (keeps layout stable)
+  if (noScale <= NO_MIN_SCALE + 0.0001) {
+    noBtn.classList.add("hidden-small");
   } else {
-    vibrate([60, 30, 60, 30, 60]);
+    noBtn.classList.remove("hidden-small");
   }
-
-  /* Emoji reacts & turns head */
-  emoji.textContent = emojiStates[clicks % emojiStates.length];
-  emoji.style.transform = "rotate(15deg)";
-  setTimeout(() => emoji.style.transform = "rotate(-15deg)", 120);
-
-  /* YES grows slowly */
-  yesScale += 0.08;
-  yesBtn.style.transform = `translateX(-50%) scale(${yesScale})`;
-
-  /* YES becomes huge (50% screen width) */
-  if (yesScale >= 2.2) {
-    yesBtn.style.width = "50vw";
-  }
-
-  /* NO button disappears after enough clicks */
-  if (clicks >= 12) { // adjust number of clicks before disappearing
-    noBtn.style.opacity = "0";
-    noBtn.style.pointerEvents = "none";
-    return;
-  }
-
-  /* NO button runs away but stays fully on screen */
-  const padding = 10; // margin from edges
-  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
-
-  noBtn.style.left = padding + Math.random() * maxX + "px";
-  noBtn.style.top = padding + Math.random() * maxY + "px";
-
-  /* Hearts */
-  createHeart();
 });
 
-/* YES button */
 yesBtn.addEventListener("click", () => {
-  vibrate([100, 50, 100, 50, 200]);
-
   document.body.innerHTML = `
-    <div style="text-align:center">
-      <h1 style="font-size:4rem">YAY 💖</h1>
-      <h2>You’re my Valentine 🥰</h2>
+    <div style="text-align:center; padding: 40px;">
+      <h1>Yay! 💖 Thank you!</h1>
+      <p>You made my day 🥰</p>
     </div>
   `;
-
-  for (let i = 0; i < 25; i++) {
-    setTimeout(createHeart, i * 80);
-  }
 });
