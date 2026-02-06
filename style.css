@@ -11,18 +11,14 @@ body {
   background: linear-gradient(135deg, #ff9a9e, #fad0c4);
   min-height: 100vh;
   margin: 0;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow: hidden; /* prevent scrolling */
 }
-
 .container {
-  width: 100%;
-  max-width: 420px;
   text-align: center;
+  position: relative;
+  width: 100%;
+  height: 100vh;
 }
-
 /* Emoji */
 #emoji {
   font-size: 5.5rem;
@@ -65,8 +61,10 @@ button {
 
 /* NO */
 #noBtn {
-  background-color: #adb5bd;
   left: 50%;
+  background-color: #adb5bd;
+  position: absolute;
   top: 0;
   transform: translateX(-50%);
 }
+
