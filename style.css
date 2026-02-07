@@ -20,6 +20,14 @@ html, body {
   align-items: center;
 }
 
+/* 🐱 CAT */
+#cat {
+  width: 200px;
+  max-width: 60vw;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
 h1 {
   font-size: clamp(2.8rem, 6vw, 4.2rem);
   color: white;
@@ -61,7 +69,7 @@ button {
   top: 65%;
 }
 
-/* 🏃 running animation */
+/* 🏃 NO button run animation */
 .run {
   animation: runAway 0.35s ease;
 }
