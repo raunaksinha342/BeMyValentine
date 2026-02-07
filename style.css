@@ -26,6 +26,7 @@ h1 {
   color: white;
   margin-bottom: 60px;
   text-align: center;
+  
 }
 
 .buttons {
@@ -73,3 +74,4 @@ button {
   80%  { transform: scale(0.9) rotate(5deg); }
   100% { transform: scale(1) rotate(0deg); }
 }
+
