@@ -1,21 +1,23 @@
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-const question = document.getElementById("question");
 
 let noClicks = 0;
 let yesScale = 1;
+let noScale = 1;
 
-/* 🔔 VIBRATION HELPER */
+const MIN_NO_SCALE = 0.45; // minimum size after 5 clicks
+const SHRINK_STEP = (1 - MIN_NO_SCALE) / 5;
+
+/* 📳 vibration helper */
 function vibrate(pattern) {
   if ("vibrate" in navigator) {
     navigator.vibrate(pattern);
   }
 }
 
-/* ✅ YES CLICK */
+/* YES click */
 yesBtn.addEventListener("click", () => {
   vibrate([100, 50, 150]);
-  question.innerHTML = "YAY!!! 💖🥰";
   document.body.innerHTML = `
     <div style="
       height:100%;
@@ -26,40 +28,38 @@ yesBtn.addEventListener("click", () => {
       color:white;
       text-align:center;
     ">
-      Thank you for being my Valentine 💕<br>😍💘🥰
+      YAYYY 💖🥰<br>
+      Thank you for being my Valentine 💘
     </div>
   `;
 });
 
-/* ❌ NO CLICK */
+/* NO click */
 noBtn.addEventListener("click", () => {
+  vibrate([40, 30, 40]);
+
+  // shrink NO (max 5 times)
+  if (noClicks < 5) {
+    noScale -= SHRINK_STEP;
+    noBtn.style.transform = `scale(${noScale})`;
+  }
+
   noClicks++;
 
-  // angry vibration
-  vibrate([40, 30, 40, 30, 40]);
-
-  // emoji reaction
-  noBtn.innerText = "NO 🙄";
-
-  // grow YES button
+  // grow YES
   yesScale += 0.25;
   yesBtn.style.transform = `translate(-50%, -50%) scale(${yesScale})`;
 
-  // after many clicks YES takes over
-  if (yesScale >= 2.5) {
-    noBtn.style.opacity = "0";
-    noBtn.style.pointerEvents = "none";
-    yesBtn.style.width = "80vw";
-    yesBtn.style.height = "20vh";
-    yesBtn.style.fontSize = "3rem";
-    return;
-  }
+  // running animation
+  noBtn.classList.remove("run");
+  void noBtn.offsetWidth; // restart animation
+  noBtn.classList.add("run");
 
-  moveNoButtonSafely();
+  moveNoSafely();
 });
 
-/* 🧠 SAFE MOVEMENT (NEVER OFFSCREEN) */
-function moveNoButtonSafely() {
+/* 🚧 keeps NO inside screen */
+function moveNoSafely() {
   const padding = 20;
 
   const btnWidth = noBtn.offsetWidth;
@@ -68,9 +68,9 @@ function moveNoButtonSafely() {
   const maxX = window.innerWidth - btnWidth - padding;
   const maxY = window.innerHeight - btnHeight - padding;
 
-  const randomX = Math.random() * maxX + padding;
-  const randomY = Math.random() * maxY + padding;
+  const x = Math.random() * maxX + padding;
+  const y = Math.random() * maxY + padding;
 
-  noBtn.style.left = `${randomX}px`;
-  noBtn.style.top = `${randomY}px`;
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
 }
