@@ -13,7 +13,6 @@ html, body {
 }
 
 .container {
-  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -24,15 +23,14 @@ html, body {
 h1 {
   font-size: clamp(2.8rem, 6vw, 4.2rem);
   color: white;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   text-align: center;
-  
 }
 
 .buttons {
   position: relative;
-  width: 100%;
-  height: 45vh;
+  width: min(90vw, 500px);
+  height: 300px;
 }
 
 button {
@@ -43,9 +41,9 @@ button {
   border-radius: 50px;
   cursor: pointer;
   transition:
-    transform 0.25s ease,
     left 0.35s ease,
-    top 0.35s ease;
+    top 0.35s ease,
+    transform 0.25s ease;
 }
 
 #yesBtn {
@@ -63,15 +61,14 @@ button {
   top: 65%;
 }
 
-/* 🏃 run animation */
+/* 🏃 running animation */
 .run {
   animation: runAway 0.35s ease;
 }
 
 @keyframes runAway {
-  0%   { transform: scale(1) rotate(0deg); }
-  40%  { transform: scale(0.95) rotate(-5deg); }
-  80%  { transform: scale(0.9) rotate(5deg); }
-  100% { transform: scale(1) rotate(0deg); }
+  0%   { transform: scale(var(--s,1)) rotate(0deg); }
+  40%  { transform: scale(var(--s,1)) rotate(-6deg); }
+  80%  { transform: scale(var(--s,1)) rotate(6deg); }
+  100% { transform: scale(var(--s,1)) rotate(0deg); }
 }
-
