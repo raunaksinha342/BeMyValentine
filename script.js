@@ -1,21 +1,20 @@
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
+const arena = document.getElementById("arena");
 
 let noClicks = 0;
 let yesScale = 1;
 let noScale = 1;
 
-const MIN_NO_SCALE = 0.45; // minimum size after 5 clicks
-const SHRINK_STEP = (1 - MIN_NO_SCALE) / 5;
+const MIN_NO_SCALE = 0.45;
+const MAX_NO_CLICKS = 5;
 
-/* 📳 vibration helper */
-function vibrate(pattern) {
-  if ("vibrate" in navigator) {
-    navigator.vibrate(pattern);
-  }
+/* vibration */
+function vibrate(p) {
+  if ("vibrate" in navigator) navigator.vibrate(p);
 }
 
-/* YES click */
+/* YES */
 yesBtn.addEventListener("click", () => {
   vibrate([100, 50, 150]);
   document.body.innerHTML = `
@@ -28,48 +27,49 @@ yesBtn.addEventListener("click", () => {
       color:white;
       text-align:center;
     ">
-      YAYYY 💖🥰<br>
-      Thank you for being my Valentine 💘
+      YAY 💖🥰<br>Thank you for being my Valentine 💘
     </div>
   `;
 });
 
-/* NO click */
+/* NO */
 noBtn.addEventListener("click", () => {
   vibrate([40, 30, 40]);
 
-  // shrink NO (max 5 times)
-  if (noClicks < 5) {
-    noScale -= SHRINK_STEP;
+  if (noClicks < MAX_NO_CLICKS) {
+    noScale = 1 - ((1 - MIN_NO_SCALE) * (noClicks + 1) / MAX_NO_CLICKS);
+    noBtn.style.setProperty("--s", noScale);
     noBtn.style.transform = `scale(${noScale})`;
   }
 
   noClicks++;
 
-  // grow YES
   yesScale += 0.25;
   yesBtn.style.transform = `translate(-50%, -50%) scale(${yesScale})`;
 
-  // running animation
+  // restart run animation
   noBtn.classList.remove("run");
-  void noBtn.offsetWidth; // restart animation
+  void noBtn.offsetWidth;
   noBtn.classList.add("run");
 
   moveNoSafely();
 });
 
-/* 🚧 keeps NO inside screen */
+/* 🚧 HARD BOUNDARY – NEVER ESCAPES */
 function moveNoSafely() {
-  const padding = 20;
+  const padding = 10;
 
-  const btnWidth = noBtn.offsetWidth;
-  const btnHeight = noBtn.offsetHeight;
+  const arenaRect = arena.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
 
-  const maxX = window.innerWidth - btnWidth - padding;
-  const maxY = window.innerHeight - btnHeight - padding;
+  const scaledWidth = btnRect.width;
+  const scaledHeight = btnRect.height;
 
-  const x = Math.random() * maxX + padding;
-  const y = Math.random() * maxY + padding;
+  const maxX = arena.clientWidth - scaledWidth - padding;
+  const maxY = arena.clientHeight - scaledHeight - padding;
+
+  const x = Math.max(padding, Math.random() * maxX);
+  const y = Math.max(padding, Math.random() * maxY);
 
   noBtn.style.left = `${x}px`;
   noBtn.style.top = `${y}px`;
